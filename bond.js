@@ -1,9 +1,13 @@
+/** Represent a bond. */
 class Bond {
-    // issuer is a string
-    // nominal is a number
-    // currency is a string
-    // maturity is a date
-    // coupon is a percentage
+    /**
+     * Create a point.
+     * @param {string} issuer - The issuer.
+     * @param {number} nominal - The nominal value, also called face value.
+     * @param {string} currency - The currency.
+     * @param {Date} maturity - The maturity.
+     * @param {number} coupon - The bond rate must be a proper fraction.
+     */
     constructor(issuer, nominal, currency, maturity, coupon) {
         this.issuer = issuer;
         this.nominal = nominal;
@@ -14,11 +18,19 @@ class Bond {
         this.averageDaysInYear = 365.25;
     }
 
+    /**
+     * Compute the full interest of one coupon payment.
+     * @return {number} The value of a coupon.
+     */
     fullInterest() {
         return this.nominal * this.coupon;
     }
 
-    // t is a date
+    /**
+     * Compute the accrued interest of one coupon payment for a given date.
+     * @param {Date} t - The date used to compute the accrued number of days since the previous coupon detachement.
+     * @return {number} The accrued interest.
+     */
     accruedInterest(t) {
         if (this.remainingCoupons(t) === 0)
             return 0;
@@ -37,7 +49,11 @@ class Bond {
         return accruedRatio * this.fullInterest();
     }
 
-    // t is a date
+    /**
+     * Compute the previous detachment date for a given date.
+     * @param {Date} t - The date used to compute the accrued number of days since the previous coupon detachement.
+     * @return {Date} The previous detachment date.
+     */
     previousDetachmentDate(t) {
         if (t >= this.maturity)
             return this.maturity;
@@ -54,7 +70,11 @@ class Bond {
         return couponDate;
     }
 
-    // t is a date
+    /**
+     * Compute the remaining number of coupon detachments for a given date.
+     * @param {*} t - The date used to compute the remaining number of coupon detachments until the bond maturity.
+     * @return {number} The remaining number of coupon detachments as an integer.
+     */
     remainingCoupons(t) {
         const previousDetachmentDate = this.previousDetachmentDate(t);
 
@@ -64,8 +84,12 @@ class Bond {
         return Math.round(remainingYears);
     }
 
-    // n is an integer
-    // t is a Date
+    /**
+     * Add years to the given date.
+     * @param {*} n - The number of years to add.
+     * @param {*} t - The date to modify.
+     * @return {Date} The given date passed in parameter.
+     */
     addYearsTo(n, t) {
         t.setFullYear(t.getFullYear() + n);
 
